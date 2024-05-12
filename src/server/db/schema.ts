@@ -7,7 +7,7 @@ import {
   pgTableCreator,
   serial,
   timestamp,
-  varchar,
+  text,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -16,19 +16,21 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `test-containers-t3_${name}`);
+export const createTable = pgTableCreator(
+  (name) => `test-containers-t3_${name}`,
+);
 
 export const posts = createTable(
   "post",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    name: text("name"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true }),
+    updatedAt: timestamp("updatedAt", { withTimezone: true })
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
